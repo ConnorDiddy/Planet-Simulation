@@ -1,8 +1,11 @@
 import pygame
 import math
-from Assets.constants import WIDTH, HEIGHT, WHITE, YELLOW, BLUE, RED, DARK_GRAY, GREEN, BLACK, FPS
+from Assets.constants import WIDTH, HEIGHT, WHITE, YELLOW, BLUE,\
+     RED, DARK_GRAY, GREEN, BLACK, FPS
 
 pygame.init()
+
+FONT = pygame.font.SysFont("comicsans", 16)
 
 FONT = pygame.font.SysFont("comicsans", 16)
 
@@ -111,10 +114,14 @@ def main():
     mercury.y_vel = -47.4 * 1000
     venus = Planet(0.723 * Planet.AU, 0, 14, WHITE, 4.8685 * 10**24, "Venus")
     venus.y_vel = -35.02 * 1000
+    moon = Planet(-1.001 * Planet.AU, 0, 4, WHITE, 7.5 * 10**22, "Moon")
+    moon.y_vel = 1.022 * 1000
 
+    jupiter = Planet(5.2 * Planet.AU, 0, 30, BLUE, 1.9 * 10**27, "Jupiter")
+    jupiter.y_vel = 13.06 * 1000
     sun.sun = True
 
-    planets = [sun, earth, mars, mercury, venus]
+    planets = [sun, earth, mars, mercury, venus, jupiter, moon]
 
     while run:
 
@@ -125,6 +132,10 @@ def main():
 
         for event in pygame.event.get():
 
+            if event.type == pygame.KEYDOWN:
+
+                pass
+
             if event.type == pygame.QUIT:
                 run = False
 
@@ -133,13 +144,7 @@ def main():
             planet.draw(WIN, time_elapsed, name)
         pygame.display.update()
 
-        for event in pygame.event.get():
-
-            if event.type == pygame.KEYDOWN:
-
-                if event.key == pygame.K_UP:
-                    print("yes")
-                    Planet.TIMESTEP = Planet.TIMESTEP * 10
+        
 
     pygame.quit()
 
