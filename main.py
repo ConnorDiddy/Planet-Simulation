@@ -5,7 +5,7 @@ pygame.init()
 
 WHITE = (255,255,255)
 YELLOW = (255,255,0)
-BLUE = (100,149,255)
+BLUE = (100,100,255)
 RED = (188, 39, 50)
 DARK_GRAY = (80,78,81)
 GREEN = (40, 255, 0)
@@ -25,12 +25,14 @@ class Planet:
     SCALE = 250 / AU # 1 AU = 100 pixels
     TIMESTEP = 3600*24 # 1 day
 
-    def __init__(self, x, y, radius, color, mass):
+    def __init__(self, x, y, radius, color, mass, name):
         self.x = x
+        self.starting_distance = math.sqrt(x*x + y*y)
         self.y = y
         self.radius = radius
         self.color = color
         self.mass = mass
+        self.name = name
 
         self.orbit = []
         self.sun = False
@@ -39,10 +41,12 @@ class Planet:
         self.x_vel = 0
         self.y_vel = 0
 
-    def draw(self, win):
+    def draw(self, win, days_elapsed, name):
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
         pygame.draw.circle(win, self.color, (x,y), self.radius)
+        days_elapsed_text = FONT.render("Days passed: " + str(days_elapsed), 1, WHITE)
+        win.blit(days_elapsed_text, (10, 10))
         
         if len(self.orbit) > 2:
             updated_points = []
@@ -53,12 +57,12 @@ class Planet:
                 y = y * self.SCALE + HEIGHT / 2
 
                 updated_points.append((x, y))
+                
+            pygame.draw.lines(win, self.color, False, updated_points, 2)
 
             if not self.sun:
-                distance_text = FONT.render(f"{round(self.distance_to_sun / 1000, 1)}km", 1, WHITE)
-                win.blit(distance_text, (x - distance_text.get_width() / 2, y - distance_text.get_height() / 2))
-
-            pygame.draw.lines(win, self.color, False, updated_points, 2)
+                distance_text = FONT.render(self.name, 1, WHITE)
+                win.blit(distance_text, (x - distance_text.get_width() / 2, y + 10))
         
     def attraction(self, other):
         other_x, other_y = other.x, other.y
@@ -97,15 +101,17 @@ def main():
 
     clock = pygame.time.Clock()
     run = True
+    days_elapsed = 0
 
-    sun = Planet(0, 0, 30, YELLOW, 1.98892 * 10**30)
-    earth = Planet(-1 * Planet.AU, 0, 16, BLUE, 5.9742 * 10**24)
+    name = ""
+    sun = Planet(0, 0, 30, YELLOW, 1.98892 * 10**30, "Sun")
+    earth = Planet(-1 * Planet.AU, 0, 16, BLUE, 5.9742 * 10**24, "Earth")
     earth.y_vel = 29.783 * 1000
-    mars = Planet(-1.524 * Planet.AU, 0, 12, RED, 6.3 * 10**23)
+    mars = Planet(-1.524 * Planet.AU, 0, 12, RED, 6.3 * 10**23, "Mars")
     mars.y_vel = 24.077 * 1000
-    mercury = Planet(0.387 * Planet.AU, 0, 8, DARK_GRAY, 3.30 * 10**23)
+    mercury = Planet(0.387 * Planet.AU, 0, 8, DARK_GRAY, 3.30 * 10**23, "Mercury")
     mercury.y_vel = -47.4 * 1000
-    venus = Planet(0.723 * Planet.AU, 0, 14, WHITE, 4.8685 * 10**24)
+    venus = Planet(0.723 * Planet.AU, 0, 14, WHITE, 4.8685 * 10**24, "Venus")
     venus.y_vel = -35.02 * 1000
 
     sun.sun = True
@@ -115,8 +121,10 @@ def main():
     while run:
 
         clock.tick(FPS)
+
+        days_elapsed += 1
         WIN.fill(BLACK)
-        #pygame.display.update()
+
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -124,8 +132,9 @@ def main():
 
         for planet in planets:
             planet.update_position(planets)
-            planet.draw(WIN)
+            planet.draw(WIN, days_elapsed, name)
         pygame.display.update()
+
         
     
     pygame.quit()
