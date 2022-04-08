@@ -43,6 +43,7 @@ class Planet:
         pygame.draw.circle(win, self.color, (x,y), self.radius)
         
         if len(self.orbit) > 2:
+            print (self.orbit)
             updated_points = []
 
             for point in self.orbit:
@@ -52,7 +53,7 @@ class Planet:
 
                 updated_points.append((x, y))
 
-                pygame.draw.lines(win, self.color, False, updated_points, 2)
+            pygame.draw.lines(win, self.color, False, updated_points, 2)
 
     def attraction(self, other):
         other_x, other_y = other.x, other.y
