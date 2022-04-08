@@ -11,6 +11,8 @@ DARK_GRAY = (80,78,81)
 GREEN = (40, 255, 0)
 BLACK = (0,0,0)
 
+FONT = pygame.font.SysFont("comicsans", 16)
+
 FPS = 60
 WIDTH, HEIGHT = 1000,1000
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -43,7 +45,6 @@ class Planet:
         pygame.draw.circle(win, self.color, (x,y), self.radius)
         
         if len(self.orbit) > 2:
-            print (self.orbit)
             updated_points = []
 
             for point in self.orbit:
@@ -53,7 +54,12 @@ class Planet:
 
                 updated_points.append((x, y))
 
+            if not self.sun:
+                distance_text = FONT.render(f"{round(self.distance_to_sun / 1000, 1)}km", 1, WHITE)
+                win.blit(distance_text, (x - distance_text.get_width() / 2, y - distance_text.get_height() / 2))
+
             pygame.draw.lines(win, self.color, False, updated_points, 2)
+        
 
     def attraction(self, other):
         other_x, other_y = other.x, other.y
@@ -103,7 +109,7 @@ def main():
     mars = Planet(-1.524 * Planet.AU, 0, 12, RED, 6.3 * 10**23)
     mars.y_vel = 24.077 * 1000
     mercury = Planet(0.387 * Planet.AU, 0, 8, DARK_GRAY, 3.30 * 10**23)
-    mercury.y_vel = 47.4 * 1000
+    mercury.y_vel = -47.4 * 1000
     venus = Planet(0.723 * Planet.AU, 0, 14, WHITE, 4.8685 * 10**24)
     venus.y_vel = -35.02 * 1000
 
