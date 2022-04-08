@@ -9,6 +9,7 @@ BLUE = (100,149,255)
 RED = (188, 39, 50)
 DARK_GRAY = (80,78,81)
 GREEN = (40, 255, 0)
+BLACK = (0,0,0)
 
 FPS = 60
 WIDTH, HEIGHT = 1000,1000
@@ -68,6 +69,11 @@ class Planet:
             total_fy += fy
 
         self.x_vel += total_fx / self.mass * self.TIMESTEP
+        self.y_vel += total_fy / self.mass * self.TIMESTEP
+
+        self.x += self.x_vel * self.TIMESTEP
+        self.y += self.y_vel * self.TIMESTEP
+        self.orbit.append((self.x, self.y))
 
 
 
@@ -91,7 +97,7 @@ def main():
     while run:
 
         clock.tick(FPS)
-        #WIN.fill(WHITE)
+        WIN.fill(BLACK)
         #pygame.display.update()
         for event in pygame.event.get():
 
@@ -99,8 +105,8 @@ def main():
                 run = False
 
         for planet in planets:
+            planet.update_position(planets)
             planet.draw(WIN)
-    
         pygame.display.update()
         
     
