@@ -41,12 +41,17 @@ class Planet:
         self.x_vel = 0
         self.y_vel = 0
 
-    def draw(self, win, days_elapsed, name):
+    def draw(self, win, time_elapsed, name):
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
         pygame.draw.circle(win, self.color, (x,y), self.radius)
-        days_elapsed_text = FONT.render("Days passed: " + str(days_elapsed), 1, WHITE)
+
+        days_elapsed_text = FONT.render("Days passed: " + str(time_elapsed / (3600*24)), 1, WHITE)
         win.blit(days_elapsed_text, (10, 10))
+
+        years_elapsed_text = FONT.render("Years passed: " + str(time_elapsed / (3600*24) / 365.25), 1, WHITE)
+        win.blit(years_elapsed_text, (10,30))
+
         
         if len(self.orbit) > 2:
             updated_points = []
@@ -101,7 +106,7 @@ def main():
 
     clock = pygame.time.Clock()
     run = True
-    days_elapsed = 0
+    time_elapsed = 0
 
     name = ""
     sun = Planet(0, 0, 30, YELLOW, 1.98892 * 10**30, "Sun")
@@ -122,7 +127,7 @@ def main():
 
         clock.tick(FPS)
 
-        days_elapsed += 1
+        time_elapsed += Planet.TIMESTEP
         WIN.fill(BLACK)
 
         for event in pygame.event.get():
@@ -132,11 +137,17 @@ def main():
 
         for planet in planets:
             planet.update_position(planets)
-            planet.draw(WIN, days_elapsed, name)
+            planet.draw(WIN, time_elapsed, name)
         pygame.display.update()
 
-        
-    
+        for event in pygame.event.get():
+
+            if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_UP:
+                    print("yes")
+                    Planet.TIMESTEP = Planet.TIMESTEP * 10
+
     pygame.quit()
 
 main()
