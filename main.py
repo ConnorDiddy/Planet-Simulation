@@ -60,7 +60,6 @@ class Planet:
 
             pygame.draw.lines(win, self.color, False, updated_points, 2)
         
-
     def attraction(self, other):
         other_x, other_y = other.x, other.y
         distance_x = other_x - self.x
@@ -93,10 +92,6 @@ class Planet:
         self.x += self.x_vel * self.TIMESTEP
         self.y += self.y_vel * self.TIMESTEP
         self.orbit.append((self.x, self.y))
-
-
-
-
 
 def main():
 
