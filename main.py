@@ -106,25 +106,18 @@ def main():
 
     name = ""
     sun = Planet(0, 0, 30, YELLOW, 1.98892 * 10**30, "Sun")
-    earth = Planet(1.4959826e8 * 1000, 0, 10, BLUE, 5.9742 * 10**24, "Earth")
+    earth = Planet(1.4959826e8 * 1000, 0, 12, BLUE, 5.9742 * 10**24, "Earth")
     earth.y_vel = -2.9783e4
-    mars = Planet(-1.524 * Planet.AU, 0, 12, RED, 6.3 * 10**23, "Mars")
+    mars = Planet(-1.524 * Planet.AU, 0, 11, RED, 6.3 * 10**23, "Mars")
     mars.y_vel = 24.077 * 1000
     mercury = Planet(0.387 * Planet.AU, 0, 8, DARK_GRAY, 3.30 * 10**23, "Mercury")
     mercury.y_vel = -47.4 * 1000
-    venus = Planet(0.723 * Planet.AU, 0, 14, WHITE, 4.8685 * 10**24, "Venus")
+    venus = Planet(0.723 * Planet.AU, 0, 11, WHITE, 4.8685 * 10**24, "Venus")
     venus.y_vel = -35.02 * 1000
-    jupiter = Planet(5.2 * Planet.AU, 0, 30, BLUE, 1.9 * 10**27, "Jupiter")
-    jupiter.y_vel = 13.06 * 1000
-    saturn =Planet(9.5 * Planet.AU, 0, 25, YELLOW, 5.683 * 10**26, "Saturn")
-    saturn.y_vel = 9.68 * 1000
-    uranus = Planet(19.8 * Planet.AU, 0, 20, LIGHT_BLUE, 8.681 * 10**25, "Uranus")
-    uranus.y_vel = 6.8 * 1000
-    neptune = Planet(30 * Planet.AU, 0, 20, BLUE, 1.024 * 10**26, "Neptune")
-    neptune.y_vel = 5.43 * 1000
+
     sun.sun = True
 
-    planets = [sun,mercury, venus, earth, mars, jupiter, saturn, uranus, neptune]
+    planets = [sun,mercury, venus, earth, mars]
 
     while run:
 
@@ -146,8 +139,6 @@ def main():
             planet.update_position(planets)
             planet.draw(WIN, time_elapsed, name)
         pygame.display.update()
-
-        
 
     pygame.quit()
 
