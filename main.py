@@ -143,6 +143,3 @@ def main():
     pygame.quit()
 
 main()
-
-def run(x,y):
-    print ("YEEE")
