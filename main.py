@@ -3,15 +3,19 @@ import math
 from Assets.constants import WIDTH, HEIGHT, WHITE, YELLOW, BLUE,\
      RED, DARK_GRAY, GREEN, BLACK, FPS, LIGHT_BLUE
 
+PLAY_BTN = pygame.transform.scale(pygame.image.load('Assets/play.jpg'), (80,70))
+PAUSE_BTN = pygame.transform.scale(pygame.image.load('Assets/pause.jpg'), (80,70))
+
 pygame.init()
 
 FONT = pygame.font.SysFont("comicsans", 16)
-
-FONT = pygame.font.SysFont("comicsans", 16)
+FONT2 = pygame.font.SysFont("comicsans", 25)
 
 FPS = 60
 WIDTH, HEIGHT = 1400,1000
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
+
+
 
 pygame.display.set_caption("Planet Simulation")
 
@@ -37,17 +41,26 @@ class Planet:
         self.x_vel = 0
         self.y_vel = 0
 
-    def draw(self, win, time_elapsed, name):
+    def draw(self, win, time_elapsed, play):
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
         pygame.draw.circle(win, self.color, (x,y), self.radius)
 
         days_elapsed_text = FONT.render("Days passed: " + str(time_elapsed / (3600*24)), 1, WHITE)
+        play_text = FONT2.render("Play", 1, WHITE)
+        pause_text = FONT2.render("Pause", 1, WHITE)
         win.blit(days_elapsed_text, (10, 10))
 
         years_elapsed_text = FONT.render("Years passed: " + str(time_elapsed / (3600*24) / 365.25), 1, WHITE)
         win.blit(years_elapsed_text, (10,30))
 
+        if play:
+            win.blit(PAUSE_BTN, (WIDTH - PAUSE_BTN.get_width() - 20, 20))
+            win.blit(pause_text, (WIDTH - play_text.get_width() - 35, 85))
+
+        else:
+            win.blit(PLAY_BTN, (WIDTH - PAUSE_BTN.get_width() - 20, 20))
+            win.blit(play_text, (WIDTH - play_text.get_width() - 35, 85))
         
         if len(self.orbit) > 2:
             updated_points = []
@@ -115,6 +128,7 @@ def main():
     venus = Planet(0.723 * Planet.AU, 0, 11, WHITE, 4.8685 * 10**24, "Venus")
     venus.y_vel = -35.02 * 1000
 
+    play = False
     sun.sun = True
 
     planets = [sun,mercury, venus, earth, mars]
@@ -126,18 +140,30 @@ def main():
         time_elapsed += Planet.TIMESTEP
         WIN.fill(BLACK)
 
+        if play:
+            Planet.TIMESTEP = 3600 * 24
+        else:
+            Planet.TIMESTEP = 0
+
         for event in pygame.event.get():
 
             if event.type == pygame.KEYDOWN:
 
-                pass
+                if event.key == pygame.K_UP:
+                    pass
 
             if event.type == pygame.QUIT:
                 run = False
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                x, y = pos
+                if 1300 < x < 1372 and 22 < y < 98:
+                    play = not play
 
         for planet in planets:
             planet.update_position(planets)
-            planet.draw(WIN, time_elapsed, name)
+            planet.draw(WIN, time_elapsed, play)
         pygame.display.update()
 
     pygame.quit()

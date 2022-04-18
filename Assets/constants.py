@@ -12,3 +12,6 @@ BLACK = (0,0,0)
 LIGHT_BLUE = (200,200,255)
 
 FPS = 60
+
+PLAY_BTN = pygame.image.load('Assets/play.png')
+PAUSE_BTN = pygame.image.load('Assets/pause.png')
